@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="de" style="--line-length: 60rem">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://unpkg.com/missing.css@1.1.1">
+    <script src="https://unpkg.com/htmx.org@2.0.0/dist/htmx.js" integrity="sha384-Xh+GLLi0SMFPwtHQjT72aPG19QvKB8grnyRbYBNIdHWc2NkCrz65jlU7YrzO6qRp" crossorigin="anonymous"></script>
+    <style>
+        img {
+            object-fit: contain;
+            height: 200px;
+        }
+
+        .item {
+            min-width: calc(var(--line-length) * 0.3);
+            max-width: calc(var(--line-length) * 0.3);
+        }
+
+        .match-box {
+            font-size: small;
+            background: #dadada;
+            padding: 5px;
+            width: fit-content;
+            border-radius: 16px;
+            margin: 10px auto auto auto;
+        }
+
+        .match-box p {
+            margin-bottom: 0px;
+            margin-top: 0px;
+        }
+
+        .product-name {
+            background: #d77878;
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .product-ingredients {
+            background: #a3b3f4;
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .product-store {
+            background: #9fd778;
+            padding: 4px;
+            border-radius: 12px;
+        }
+
+        .length {
+            --line-length: 50rem;
+        }
+
+    </style>
+    <title>SomeApi</title>
+</head>
+<body>
+<main>
+    <p>
+        <input type="text" name="search_text"
+               hx-get="http://localhost:3000/trigger_delay"
+               hx-trigger="keyup changed delay:500ms"
+               hx-target="#search_results"
+               placeholder="Search..."
+        >
+    </p>
+    <ul id="search_results" class="f-switch">
+
+    </ul>
+</main>
+</body>
+</html>
