@@ -19,6 +19,7 @@ use askama::Template;
 use axum::extract::Query;
 use log::{info, warn};
 use meilisearch_sdk::SearchResult;
+use tower_http::services::ServeFile;
 
 #[derive(Serialize, Deserialize)]
 pub struct QueryParams {
@@ -82,6 +83,7 @@ fn routes_dynamic() -> Router {
     Router::new()
         .route("/", get(main_page))
         .route("/trigger_delay", get(search))
+        .route_service("/css", ServeFile::new("src/frontend/styles.css"))
 }
 async fn main_page() -> Html<&'static str> {
     Html(include_str!("frontend/index.html"))

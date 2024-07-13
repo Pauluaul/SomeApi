@@ -1,0 +1,45 @@
+img {
+    object-fit: contain;
+    height: 200px;
+}
+
+.item {
+    min-width: calc(var(--line-length) * 0.3);
+    max-width: calc(var(--line-length) * 0.3);
+}
+
+.match-box {
+    font-size: small;
+    background: #dadada;
+    padding: 5px;
+    width: fit-content;
+    border-radius: 16px;
+    margin: 10px auto auto auto;
+}
+
+.match-box p {
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.product-name {
+    background: #d77878;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.product-ingredients {
+    background: #a3b3f4;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.product-store {
+    background: #9fd778;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.length {
+    --line-length: 50rem;
+}
