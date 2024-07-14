@@ -1,5 +1,6 @@
 mod database;
 
+use std::collections::HashMap;
 use std::error::Error;
 use std::future::Future;
 use std::io::read_to_string;
@@ -18,7 +19,9 @@ use futures_util::{SinkExt, TryFutureExt, TryStreamExt};
 use askama::Template;
 use axum::extract::Query;
 use log::{info, warn};
-use meilisearch_sdk::SearchResult;
+use meilisearch_sdk::{MatchRange, SearchResult};
+use serde_json::Value;
+use tower_http::cors::Vary;
 use tower_http::services::ServeFile;
 
 #[derive(Serialize, Deserialize)]
@@ -26,26 +29,15 @@ pub struct QueryParams {
     search_text: String
 }
 
-#[derive(Serialize, Deserialize)]
-pub struct BodyParams {
-    id: i32,
-    name: String,
-    surname: String
-}
-
 #[derive(Serialize, Deserialize, Debug)]
 struct Product {
     id: Option<String>, //also the EAN
     german_name: Option<String>,
     ingredients : Option<String>,
-    quantity : Option<String>
+    quantity : Option<String>,
+    #[serde(skip)]
+    matches_position: Vec<String>
 }
-
-#[derive(Serialize, Deserialize, Debug)]
-struct Zeug {
-    pub page : Option<u64>,
-}
-
 
 #[derive(Serialize, Deserialize, Debug)]
 #[derive(Clone)]
@@ -93,10 +85,21 @@ async fn search(search_query: Query<QueryParams>) -> ProductTemplate {
     let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
 
     let mut products:Vec<Product> = vec!();
-    match meilisearch_client.index("products").search().with_query(&search_query.search_text).execute::<Product>().await {
+    match meilisearch_client.index("products")
+        .search()
+        .with_query(&search_query.search_text)
+        .with_show_matches_position(true)
+        .execute::<Product>().await {
         Ok(e) => {
-            for item in e.hits {
-                products.push(item.result)
+            for mut product in e.hits {
+                products.push(Product {
+                    id : product.result.id,
+                    german_name : product.result.german_name,
+                    ingredients: None,
+                    quantity: None,
+                    matches_position : product.matches_position.unwrap().into_iter().map(|(key, value)| key).collect()
+                });
+                println!("{:?}", products)
             }
         },
         Err(e) => {

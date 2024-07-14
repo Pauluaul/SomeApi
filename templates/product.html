@@ -7,9 +7,9 @@
                 <div class="match-box">
                     <p>Matches with:</p>
                     <p>
-                        <span class="product-name">Name</span>
-                        <span class="product-store">Store</span>
-                        <span class="product-ingredients">Ingredients</span>
+                        {% for match in product.matches_position %}
+                            <span class="product-{{ match }}">{{ match }}</span>
+                        {% endfor %}
                     </p>
                 </div>
             </li>

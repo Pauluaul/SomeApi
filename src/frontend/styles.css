@@ -22,13 +22,13 @@ img {
     margin-top: 0px;
 }
 
-.product-name {
+.product-german_name  {
     background: #d77878;
     padding: 4px;
     border-radius: 12px;
 }
 
-.product-ingredients {
+.product-ingredients_de {
     background: #a3b3f4;
     padding: 4px;
     border-radius: 12px;
@@ -36,6 +36,12 @@ img {
 
 .product-store {
     background: #9fd778;
+    padding: 4px;
+    border-radius: 12px;
+}
+
+.product-brands {
+    background: #41236c;
     padding: 4px;
     border-radius: 12px;
 }

@@ -7,7 +7,11 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="first commit, sehr unordentlich, mvp &gt; schön" />
+    <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="stylesheet">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/product.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -18,6 +22,7 @@
       <list>
         <option value="Rust File" />
         <option value="HTML File" />
+        <option value="CSS File" />
       </list>
     </option>
   </component>
@@ -43,6 +48,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
@@ -120,7 +126,12 @@
       <workItem from="1720291320577" duration="3369000" />
       <workItem from="1720302972289" duration="1244000" />
       <workItem from="1720623624119" duration="597000" />
-      <workItem from="1720903007775" duration="7633000" />
+      <workItem from="1720903007775" duration="8108000" />
+      <workItem from="1720913009151" duration="596000" />
+      <workItem from="1720981961629" duration="598000" />
+      <workItem from="1720988891643" duration="16000" />
+      <workItem from="1720989104034" duration="174000" />
+      <workItem from="1720993629306" duration="3773000" />
     </task>
     <task id="LOCAL-00001" summary="first commit, sehr unordentlich, mvp &gt; schön">
       <option name="closed" value="true" />
@@ -138,7 +149,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720910649007</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="stylesheet">
+      <option name="closed" value="true" />
+      <created>1720911037305</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1720911037305</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -157,7 +176,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit, sehr unordentlich, mvp &gt; schön" />
-    <option name="LAST_COMMIT_MESSAGE" value="first commit, sehr unordentlich, mvp &gt; schön" />
+    <MESSAGE value="stylesheet" />
+    <option name="LAST_COMMIT_MESSAGE" value="stylesheet" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>
