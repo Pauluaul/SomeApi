@@ -1,18 +1,2 @@
-{% for product in products %}
-    {% if let Some(name) = product.german_name %}
-        {% if let Some(id) = product.id %}
-            <li class="box item" hx-get="http://localhost:3000/item={{ id }}">
-                <h4 class="big">{{ name }}</h4>
-                <img src="" alt="Paris" style="width:100%" loading="lazy">
-                <div class="match-box">
-                    <p>Matches with:</p>
-                    <p>
-                        {% for match in product.matches_position %}
-                            <span class="product-{{ match }}">{{ match }}</span>
-                        {% endfor %}
-                    </p>
-                </div>
-            </li>
-        {% endif %}
-    {% endif %}
-{% endfor %}
+
+    {{ id }}

@@ -14,15 +14,15 @@
 <main>
     <p>
         <input type="text" name="search_text"
-               hx-get="http://localhost:3000/trigger_delay"
-               hx-trigger="keyup changed delay:500ms"
+               hx-get="/trigger_delay"
+               hx-trigger="input changed delay:500ms"
                hx-target="#search_results"
                placeholder="Search..."
         >
     </p>
-    <ul id="search_results" class="f-switch">
+    <div id="search_results">
 
-    </ul>
+    </div>
 </main>
 </body>
 </html>

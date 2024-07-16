@@ -25,48 +25,59 @@ use tower_http::cors::Vary;
 use tower_http::services::ServeFile;
 
 #[derive(Serialize, Deserialize)]
-pub struct QueryParams {
+pub struct SearchQuery {
     search_text: String
 }
 
+#[derive(Serialize, Deserialize)]
+pub struct InfoQuery {
+    id: String
+}
+
 #[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone)]
 struct Product {
+    #[serde(rename(deserialize = "_id"))]
+    pub id : Option<String>,
+    #[serde(rename(deserialize = "product_name_de"))]
+    pub name: Option<String>,
+    #[serde(rename(deserialize = "product_name_en"))]
+    pub name_en: Option<String>,
+    #[serde(rename(deserialize = "brands"))]
+    pub brands : Option<String>,
+    #[serde(rename(deserialize = "ingredients_text_de"))]
+    pub ingredients : Option<String>,
+    #[serde(rename(deserialize = "ingredients_text_en"))]
+    pub ingredients_en: Option<String>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+struct ProductListResult {
     id: Option<String>, //also the EAN
-    german_name: Option<String>,
+    name: Option<String>,
     ingredients : Option<String>,
     quantity : Option<String>,
     #[serde(skip)]
     matches_position: Vec<String>
 }
 
-#[derive(Serialize, Deserialize, Debug)]
-#[derive(Clone)]
-struct OffProduct {
-    #[serde(rename(deserialize = "_id"))]
-    pub id : Option<String>,
-    #[serde(rename(deserialize = "product_name_de"))]
-    pub german_name : Option<String>,
-    #[serde(rename(deserialize = "product_name_en"))]
-    pub english_name : Option<String>,
-    #[serde(rename(deserialize = "brands"))]
-    pub brands : Option<String>,
-    #[serde(rename(deserialize = "ingredients_text"))]
-    pub ingredients : Option<String>,
-    #[serde(rename(deserialize = "ingredients_text_de"))]
-    pub ingredients_de : Option<String>
+#[derive(Template)]
+#[template(path = "result_product.html")]
+struct ProductListTemplate {
+    pub products : Vec<ProductListResult>
 }
 
-#[derive(Template)]
+#[derive(Template, Deserialize)]
 #[template(path = "product.html")]
-struct ProductTemplate  {
-    pub products : Vec<Product>
+struct ProductInfoTemplate {
+    pub id : String
 }
 
 #[tokio::main]
 async fn main() {
     let app = Router::new()
         .merge(routes_dynamic());
-    let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
+    let addr = SocketAddr::from(([0, 0, 0, 0], 3000));
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
@@ -75,26 +86,28 @@ fn routes_dynamic() -> Router {
     Router::new()
         .route("/", get(main_page))
         .route("/trigger_delay", get(search))
+        .route("/off", get(get_off_items))
+        .route("/product", get(product))
         .route_service("/css", ServeFile::new("src/frontend/styles.css"))
 }
 async fn main_page() -> Html<&'static str> {
     Html(include_str!("frontend/index.html"))
 }
 
-async fn search(search_query: Query<QueryParams>) -> ProductTemplate {
+async fn search(search_query: Query<SearchQuery>) -> ProductListTemplate {
     let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
-
-    let mut products:Vec<Product> = vec!();
+    println!("start search");
+    let mut products:Vec<ProductListResult> = vec!();
     match meilisearch_client.index("products")
         .search()
         .with_query(&search_query.search_text)
         .with_show_matches_position(true)
-        .execute::<Product>().await {
+        .execute::<ProductListResult>().await {
         Ok(e) => {
             for mut product in e.hits {
-                products.push(Product {
+                products.push(ProductListResult {
                     id : product.result.id,
-                    german_name : product.result.german_name,
+                    name : product.result.name,
                     ingredients: None,
                     quantity: None,
                     matches_position : product.matches_position.unwrap().into_iter().map(|(key, value)| key).collect()
@@ -107,8 +120,34 @@ async fn search(search_query: Query<QueryParams>) -> ProductTemplate {
             panic!("OH-NO")
         }
     };
-    ProductTemplate { products }
+    ProductListTemplate { products }
 }
+
+async fn product(info_query: Query<InfoQuery>) -> impl IntoResponse {
+    let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
+    println!("start search");
+    match meilisearch_client.index("products")
+        .search()
+        .with_query(&info_query.id)
+        .with_show_matches_position(true)
+        .execute::<ProductInfoTemplate>().await {
+        Ok(e) => {
+            if e.total_hits > Some(1) {
+                ProductInfoTemplate {
+                    id : e.hits.into_iter().nth(0).unwrap().result.id
+                }
+            }
+            else {
+                ProductInfoTemplate{ id : 0.to_string() }
+            }
+        },
+        Err(e) => {
+            warn!("Unable to locate a razor: {e}, retrying");
+            ProductInfoTemplate{ id : 0.to_string() }
+        }
+    }
+}
+
 async fn get_off_items() -> impl IntoResponse {
     println!("start.");
 
@@ -125,10 +164,10 @@ async fn get_off_items() -> impl IntoResponse {
     };
 
     let mut off_database = mongo_client.database("off");
-    let mut products_collection = off_database.collection::<OffProduct>("products");
+    let mut products_collection = off_database.collection::<Product>("products");
 
-    let mongo_filter = doc! {"ingredients_analysis_tags" : "en:vegan", "countries_tags" : "en:germany"};
-    let mut results = match products_collection.find(mongo_filter, FindOptions::builder().build()).await {
+    let mongo_filter = doc! {"ingredients_analysis_tags" : "en:vegan", "countries_tags.0" : "en:germany"};
+    let mut results = match products_collection.find(mongo_filter, FindOptions::builder().limit(1000).build()).await {
         Ok(e) => e,
         Err(e) => panic!("mongo search failed")
     };

@@ -7,8 +7,10 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="stylesheet">
+    <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="heute ist nicht alle tage, wir sehn uns wieder keine frage">
+      <change afterPath="$PROJECT_DIR$/templates/result_product.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/product.html" afterDir="false" />
     </list>
@@ -21,8 +23,8 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Rust File" />
-        <option value="HTML File" />
         <option value="CSS File" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -131,7 +133,12 @@
       <workItem from="1720981961629" duration="598000" />
       <workItem from="1720988891643" duration="16000" />
       <workItem from="1720989104034" duration="174000" />
-      <workItem from="1720993629306" duration="3773000" />
+      <workItem from="1720993629306" duration="4165000" />
+      <workItem from="1721056390697" duration="775000" />
+      <workItem from="1721058949779" duration="246000" />
+      <workItem from="1721059222702" duration="3214000" />
+      <workItem from="1721067282793" duration="1213000" />
+      <workItem from="1721160256276" duration="3958000" />
     </task>
     <task id="LOCAL-00001" summary="first commit, sehr unordentlich, mvp &gt; schön">
       <option name="closed" value="true" />
@@ -157,7 +164,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720911037305</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="heute ist nicht alle tage, wir sehn uns wieder keine frage">
+      <option name="closed" value="true" />
+      <created>1720997833934</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1720997833934</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -177,7 +192,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="first commit, sehr unordentlich, mvp &gt; schön" />
     <MESSAGE value="stylesheet" />
-    <option name="LAST_COMMIT_MESSAGE" value="stylesheet" />
+    <MESSAGE value="heute ist nicht alle tage, wir sehn uns wieder keine frage" />
+    <option name="LAST_COMMIT_MESSAGE" value="heute ist nicht alle tage, wir sehn uns wieder keine frage" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

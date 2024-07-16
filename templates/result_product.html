@@ -1,0 +1,20 @@
+<ul  class="f-switch">
+    {% for product in products %}
+        {% if let Some(name) = product.name %}
+            {% if let Some(id) = product.id %}
+                <li class="box item" hx-get="/product?id={{ id }}">
+                    <h4 class="big">{{ name }}</h4>
+                    <img src="" alt="{{ id }}" style="width:100%" loading="lazy">
+                    <div class="match-box">
+                        <p>Matches with:</p>
+                        <p>
+                            {% for match in product.matches_position %}
+                                <span class="product-{{ match }}">{{ match }}</span>
+                            {% endfor %}
+                        </p>
+                    </div>
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+</ul>
