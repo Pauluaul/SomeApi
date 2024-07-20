@@ -7,12 +7,16 @@
     <cargoProject FILE="$PROJECT_DIR$/Cargo.toml" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="heute ist nicht alle tage, wir sehn uns wieder keine frage">
-      <change afterPath="$PROJECT_DIR$/templates/result_product.html" afterDir="false" />
+    <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="hab mal wieder keine motivation">
+      <change afterPath="$PROJECT_DIR$/src/templates.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/frontend/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/product.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/result_product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/result_product.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,9 +26,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Rust File" />
         <option value="CSS File" />
         <option value="HTML File" />
+        <option value="Rust File" />
       </list>
     </option>
   </component>
@@ -61,6 +65,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\pauls\RustroverProjects\SomeApi\src" />
+      <recent name="C:\Users\pauls\RustroverProjects\SomeApi\src\images" />
       <recent name="C:\Users\pauls\RustroverProjects\SomeApi\dumps" />
     </key>
   </component>
@@ -138,7 +144,9 @@
       <workItem from="1721058949779" duration="246000" />
       <workItem from="1721059222702" duration="3214000" />
       <workItem from="1721067282793" duration="1213000" />
-      <workItem from="1721160256276" duration="3958000" />
+      <workItem from="1721160256276" duration="4242000" />
+      <workItem from="1721375711050" duration="9787000" />
+      <workItem from="1721469291258" duration="1225000" />
     </task>
     <task id="LOCAL-00001" summary="first commit, sehr unordentlich, mvp &gt; schön">
       <option name="closed" value="true" />
@@ -172,7 +180,15 @@
       <option name="project" value="LOCAL" />
       <updated>1720997833934</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="hab mal wieder keine motivation">
+      <option name="closed" value="true" />
+      <created>1721164785412</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1721164785412</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -193,7 +209,8 @@
     <MESSAGE value="first commit, sehr unordentlich, mvp &gt; schön" />
     <MESSAGE value="stylesheet" />
     <MESSAGE value="heute ist nicht alle tage, wir sehn uns wieder keine frage" />
-    <option name="LAST_COMMIT_MESSAGE" value="heute ist nicht alle tage, wir sehn uns wieder keine frage" />
+    <MESSAGE value="hab mal wieder keine motivation" />
+    <option name="LAST_COMMIT_MESSAGE" value="hab mal wieder keine motivation" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

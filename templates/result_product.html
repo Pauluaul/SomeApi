@@ -2,17 +2,21 @@
     {% for product in products %}
         {% if let Some(name) = product.name %}
             {% if let Some(id) = product.id %}
-                <li class="box item" hx-get="/product?id={{ id }}">
-                    <h4 class="big">{{ name }}</h4>
-                    <img src="" alt="{{ id }}" style="width:100%" loading="lazy">
-                    <div class="match-box">
-                        <p>Matches with:</p>
-                        <p>
-                            {% for match in product.matches_position %}
-                                <span class="product-{{ match }}">{{ match }}</span>
-                            {% endfor %}
-                        </p>
-                    </div>
+                <li class="box item">
+                    <a href="/product?id={{ id }}">
+                        <div class="info-box">
+                            <h4 class="big">{{ name }}</h4>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Grey_squirrel_400px.jpg" alt="{{ id }}" style="width:100%" loading="lazy">
+                        </div>
+                        <div class="match-box">
+                            <p>Matches with:</p>
+                            <p>
+                                {% for match in product.matches_position %}
+                                    <span class="product-{{ match }}">{{ match }}</span>
+                                {% endfor %}
+                            </p>
+                        </div>
+                    </a>
                 </li>
             {% endif %}
         {% endif %}

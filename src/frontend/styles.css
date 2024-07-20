@@ -49,3 +49,12 @@ img {
 .length {
     --line-length: 50rem;
 }
+
+.item>a {
+    text-decoration: none;
+    color: black;
+}
+
+.item>a:hover {
+    text-decoration: none;
+}
