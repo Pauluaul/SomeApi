@@ -8,13 +8,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7413b418-3275-4e16-bfb2-d7c34eae99c0" name="Changes" comment="hab mal wieder keine motivation">
-      <change afterPath="$PROJECT_DIR$/src/templates.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.lock" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Cargo.toml" beforeDir="false" afterPath="$PROJECT_DIR$/Cargo.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontend/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.rs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/templates.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/templates.rs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/product.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/result_product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/result_product.html" afterDir="false" />
     </list>
@@ -54,6 +52,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/pauls/RustroverProjects/SomeApi/templates&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -66,6 +65,7 @@
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\pauls\RustroverProjects\SomeApi\src" />
+      <recent name="C:\Users\pauls\RustroverProjects\SomeApi\templates" />
       <recent name="C:\Users\pauls\RustroverProjects\SomeApi\src\images" />
       <recent name="C:\Users\pauls\RustroverProjects\SomeApi\dumps" />
     </key>
@@ -147,6 +147,10 @@
       <workItem from="1721160256276" duration="4242000" />
       <workItem from="1721375711050" duration="9787000" />
       <workItem from="1721469291258" duration="1225000" />
+      <workItem from="1721586399881" duration="45000" />
+      <workItem from="1721674949272" duration="205000" />
+      <workItem from="1721675183267" duration="2993000" />
+      <workItem from="1721758374191" duration="13439000" />
     </task>
     <task id="LOCAL-00001" summary="first commit, sehr unordentlich, mvp &gt; schön">
       <option name="closed" value="true" />

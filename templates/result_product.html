@@ -6,7 +6,9 @@
                     <a href="/product?id={{ id }}">
                         <div class="info-box">
                             <h4 class="big">{{ name }}</h4>
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/c/cc/Grey_squirrel_400px.jpg" alt="{{ id }}" style="width:100%" loading="lazy">
+                            {% if let Some(front_image) = product.front_image %}
+                                <img src="{{ front_image }}" alt="{{ id }}" style="width:100%" loading="lazy">
+                            {% endif %}
                         </div>
                         <div class="match-box">
                             <p>Matches with:</p>

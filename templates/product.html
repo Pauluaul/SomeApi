@@ -12,7 +12,36 @@
 </head>
 <body>
 <main>
-
+    <div>
+        <h1>
+            {% match name %}
+                {% when Some with (val) %}
+                    {{ val }}
+                {% when None %}
+                    dann nicht
+            {% endmatch %}
+        </h1>
+    </div>
+    <div class="f-row">
+        <div>
+            {% match front_image %}
+                {% when Some with (val) %}
+                    <img src="{{ val }}" alt="image">
+                {% when None %}
+                    <img src="https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg" alt="image">
+            {% endmatch %}
+        </div>
+        <div>
+            <p>
+                {% match ingredients %}
+                    {% when Some with (val) %}
+                        {{ val }}
+                    {% when None %}
+                        dann nicht
+                {% endmatch %}
+            </p>
+        </div>
+    </div>
 </main>
 </body>
 </html>
