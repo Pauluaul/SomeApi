@@ -18,10 +18,19 @@
                hx-trigger="input changed delay:500ms"
                hx-target="#search_results"
                hx-include="#language"
-               placeholder="Search...">
+               placeholder="{{ search }}">
         <select id="language" name="language">
-            <option value="de">de</option>
-            <option value="en">en</option></select>
+            <option value="de"
+                    {% if locale == Locales::de %}
+                        selected
+                    {% endif %}
+            >de</option>
+            <option value="en"
+                    {% if locale == Locales::en %}
+                        selected
+                    {% endif %}
+            >en</option>
+        </select>
     </div>
     <div id="search_results">
 

@@ -24,3 +24,27 @@ pub struct ProductInfoTemplate {
     pub ingredients : Option<String>,
     pub front_image : Option<String>
 }
+
+#[derive(Template, Serialize, Deserialize)]
+#[template(path = "home.html")]
+pub struct HomeTemplate {
+    pub search : String,
+    pub locale : Locales
+}
+
+#[derive(Serialize, Deserialize)]
+#[derive(PartialEq)]
+pub enum Locales {
+    en,
+    de
+}
+
+impl Locales {
+    pub(crate) fn stringify(&self) -> &str {
+        match self {
+            Locales::en => "en",
+            Locales::de => "de",
+            serde_derive => "de"
+        }
+    }
+}

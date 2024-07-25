@@ -17,18 +17,22 @@ use mongodb::bson::{Bson, doc};
 use mongodb::options::FindOptions;
 use futures_util::{SinkExt, TryFutureExt, TryStreamExt};
 use askama::Template;
-use axum::extract::Query;
+use axum::extract::{Path, Query};
 use log::{info, log, warn};
-use meilisearch_sdk::{MatchRange, SearchResult};
+use meilisearch_sdk;
 use serde_json::Value;
 use tower_http::cors::Vary;
 use tower_http::services::ServeFile;
 use std::fs::File;
 use std::io::copy;
 use std::iter::Map;
+use std::ops::Deref;
 use tokio::io::AsyncWriteExt;
+use rust_i18n::{i18n, t};
 
 mod templates;
+
+i18n!("src/locales");
 
 #[derive(Serialize, Deserialize)]
 pub struct SearchQuery {
@@ -43,7 +47,7 @@ pub struct InfoQuery {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[derive(Clone)]
-struct Product {
+struct OffProduct {
     #[serde(rename(deserialize = "_id"))]
     pub id : Option<String>,
     #[serde(rename(deserialize = "product_name_de"))]
@@ -56,8 +60,32 @@ struct Product {
     pub ingredients_de : Option<String>,
     #[serde(rename(deserialize = "ingredients_text_en"))]
     pub ingredients_en: Option<String>,
-    pub front_image: Option<String>,
     pub images: Option<ImageType>
+}
+
+impl OffProduct {
+    async fn to_vfb(&self) -> VFBProduct {
+        VFBProduct {
+            id: self.id.clone(),
+            name: self.name.clone(),
+            name_en: self.name_en.clone(),
+            brands: self.brands.clone(),
+            ingredients_de: self.ingredients_de.clone(),
+            ingredients_en: self.ingredients_en.clone(),
+            front_image: download_image(&self.id, &self.images).await
+        }
+    }
+}
+#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone)]
+struct VFBProduct {
+    pub id : Option<String>,
+    pub name: Option<String>,
+    pub name_en: Option<String>,
+    pub brands : Option<String>,
+    pub ingredients_de : Option<String>,
+    pub ingredients_en: Option<String>,
+    pub front_image: Option<String>
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -86,13 +114,18 @@ async fn main() {
 fn routes_dynamic() -> Router {
     Router::new()
         .route("/", get(main_page))
+        .route("/:locale", get(main_page))
         .route("/trigger_delay", get(search))
         .route("/off", get(get_off_items))
         .route("/product", get(product))
         .route_service("/css", ServeFile::new("src/frontend/styles.css"))
 }
-async fn main_page() -> Html<&'static str> {
-    Html(include_str!("frontend/home.html"))
+async fn main_page(locale: Option<Path<templates::Locales>>) -> templates::HomeTemplate {
+    let locale = locale.unwrap_or(Path(templates::Locales::de)).0;
+    templates::HomeTemplate {
+        search: t!("search", locale = locale.stringify()).to_string(),
+        locale: locale //no shorthand wegen übersicht
+    }
 }
 
 async fn search(search_query: Query<SearchQuery>) -> templates::ProductListTemplate {
@@ -103,12 +136,18 @@ async fn search(search_query: Query<SearchQuery>) -> templates::ProductListTempl
         .search()
         .with_query(&search_query.search_text)
         .with_show_matches_position(true)
-        .execute::<templates::ProductListResult>().await {
+        .execute::<VFBProduct>().await {
         Ok(e) => {
             for mut product in e.hits {
                 products.push(templates::ProductListResult {
                     id : product.result.id,
-                    name : product.result.name,
+                    name : {
+                        if product.result.name.clone().is_some_and(|s| s.len() > 0) {
+                            product.result.name
+                        } else {
+                            product.result.name_en
+                        }
+                    },
                     front_image: product.result.front_image,
                     matches_position : product.matches_position.unwrap().into_iter().map(|(key, value)| key).collect()
                 });
@@ -167,10 +206,10 @@ async fn get_off_items() -> impl IntoResponse {
     };
 
     let mut off_database = mongo_client.database("off");
-    let mut products_collection = off_database.collection::<Product>("products");
+    let mut products_collection = off_database.collection::<OffProduct>("products");
 
     let mongo_filter = doc! {"ingredients_analysis_tags" : "en:vegan", "countries_tags.0" : "en:germany"};
-    let mut results = match products_collection.find(mongo_filter, FindOptions::builder().limit(100).build()).await {
+    let mut results = match products_collection.find(mongo_filter).limit(100).await {
         Ok(e) => e,
         Err(_e) => {
             info!("MongoDB Search failed");
@@ -183,8 +222,8 @@ async fn get_off_items() -> impl IntoResponse {
     let meiliesearch_index = meilisearch_client.index("products");
 
     while let Ok(Some(mut product)) = results.try_next().await {
-        product.front_image = download_image(&product.id, &product.images).await;
-        match meiliesearch_index.add_documents(&[product], Option::from("id")).await {
+        let vfb_product = product.to_vfb().await;
+        match meiliesearch_index.add_documents(&[vfb_product], Option::from("id")).await {
             Err(_e) => {
                 {
                     info!("Meilisearch index failed");
