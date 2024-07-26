@@ -3,3 +3,19 @@ _version: 2
 search:
   en: Search...
   de: Suche...
+
+name:
+  en: name german
+  de: Name
+
+brands:
+  en: brands
+  de: Marken
+
+ingredients:
+  en: Ingredients german
+  de: Inhaltsstoffe
+
+matches_with:
+  en: Matches with
+  de: Übereinstimmung mit

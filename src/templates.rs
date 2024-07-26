@@ -1,11 +1,12 @@
+use std::collections::HashMap;
 use askama_axum::Template;
 use serde_derive::{Deserialize, Serialize};
-use serde_json::Value;
 
 #[derive(Template)]
 #[template(path = "result_product.html")]
 pub struct ProductListTemplate {
-    pub products : Vec<ProductListResult>
+    pub products: Vec<ProductListResult>,
+    pub matches_with_text: String
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -14,10 +15,11 @@ pub struct ProductListResult {
     pub name: Option<String>,
     pub front_image: Option<String>,
     #[serde(skip)]
-    pub matches_position: Vec<String>
+    pub matches_position: HashMap<String, String>,
+    pub locale: String
 }
 
-#[derive(Template, Serialize, Deserialize)]
+#[derive(Template, Serialize, Deserialize, Debug, Clone)]
 #[template(path = "product.html")]
 pub struct ProductInfoTemplate {
     pub name : Option<String>,
@@ -35,16 +37,17 @@ pub struct HomeTemplate {
 #[derive(Serialize, Deserialize)]
 #[derive(PartialEq)]
 pub enum Locales {
-    en,
-    de
+    #[serde(rename(deserialize = "en"))]
+    EN,
+    #[serde(rename(deserialize = "de"))]
+    DE
 }
 
 impl Locales {
-    pub(crate) fn stringify(&self) -> &str {
+    pub(crate) fn to_string(&self) -> &str {
         match self {
-            Locales::en => "en",
-            Locales::de => "de",
-            serde_derive => "de"
+            Locales::EN => "en",
+            Locales::DE => "de"
         }
     }
 }

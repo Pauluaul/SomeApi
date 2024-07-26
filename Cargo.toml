@@ -24,5 +24,5 @@ futures-util = "0.3.29"
 askama = { version = "0.12.1", features = ["with-axum"] }
 askama_axum = "0.4.0"
 log = "0.4.20"
-simple_logger = "5.0.0"
+simple-logging = "2.0.2"
 rust-i18n = "3.0.0"

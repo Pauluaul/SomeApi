@@ -22,25 +22,25 @@ img {
     margin-top: 0px;
 }
 
-.product-german_name  {
+.name  {
     background: #d77878;
     padding: 4px;
     border-radius: 12px;
 }
 
-.product-ingredients_de {
+.ingredients {
     background: #a3b3f4;
     padding: 4px;
     border-radius: 12px;
 }
 
-.product-store {
+.stores {
     background: #9fd778;
     padding: 4px;
     border-radius: 12px;
 }
 
-.product-brands {
+.brands {
     background: #41236c;
     padding: 4px;
     border-radius: 12px;
@@ -57,4 +57,23 @@ img {
 
 .item>a:hover {
     text-decoration: none;
+}
+
+.match-box>p {
+    text-align: center;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    opacity: 0;
+}
+
+#tooltip-checkbox {
+    display: none;
+}
+
+#tooltip-checkbox:checked + label > .tooltip {
+    display: block;
+    opacity: 1;
 }

@@ -21,16 +21,20 @@
                placeholder="{{ search }}">
         <select id="language" name="language">
             <option value="de"
-                    {% if locale == Locales::de %}
+                    {% if locale == Locales::DE %}
                         selected
                     {% endif %}
             >de</option>
             <option value="en"
-                    {% if locale == Locales::en %}
+                    {% if locale == Locales::EN %}
                         selected
                     {% endif %}
             >en</option>
         </select>
+    </div>
+    <div>
+        <input id="tooltip-checkbox" type="checkbox">
+        <label for="tooltip-checkbox"> Wie sucht man? <span class="tooltip">just do it</span></label>
     </div>
     <div id="search_results">
 

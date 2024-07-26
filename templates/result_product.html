@@ -6,15 +6,18 @@
                     <a href="/product?id={{ id }}">
                         <div class="info-box">
                             <h4 class="big">{{ name }}</h4>
-                            {% if let Some(front_image) = product.front_image %}
-                                <img src="{{ front_image }}" alt="{{ id }}" style="width:100%" loading="lazy">
-                            {% endif %}
+                            {% match product.front_image %}
+                                {% when Some with (val) %}
+                                    <img style="width:100%" loading="lazy" src="{{ val }}" alt="{{ id }}">
+                                {% when None %}
+                                    <img src="https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg" alt="image">
+                            {% endmatch %}
                         </div>
                         <div class="match-box">
-                            <p>Matches with:</p>
+                            <p>{{ matches_with_text }}</p>
                             <p>
                                 {% for match in product.matches_position %}
-                                    <span class="product-{{ match }}">{{ match }}</span>
+                                    <span class="{{ match.0 }}">{{ match.1 }}</span>
                                 {% endfor %}
                             </p>
                         </div>
