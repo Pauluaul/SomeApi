@@ -5,7 +5,7 @@ search:
   de: Suche...
 
 name:
-  en: name german
+  en: name
   de: Name
 
 brands:
@@ -13,9 +13,17 @@ brands:
   de: Marken
 
 ingredients:
-  en: Ingredients german
+  en: Ingredients
   de: Inhaltsstoffe
 
 matches_with:
   en: Matches with
   de: Übereinstimmung mit
+
+search_explanation:
+  en: Just input every keyword you want your product to match with. (e.g. name, ingredients, store) A minus in front of the word acts as negation.
+  de: Einfach alle Schlüsselwörter eingeben die für dein Produkt relevant sind. (Bsp. Name, Inhalt, Laden) Ein Minus vor dem Wort bedeutet das Wort soll ausgeschlossen werden.
+
+search_explanation_label:
+  en: How do i search?
+  de: Wie suche ich?

@@ -62,6 +62,8 @@ async fn main_page(locale: Option<Path<templates::Locales>>) -> templates::HomeT
     let locale = locale.unwrap_or(Path(templates::Locales::DE)).0;
     templates::HomeTemplate {
         search: t!("search", locale = locale.to_string()).to_string(),
-        locale: locale //no shorthand wegen übersicht
+        search_explanation: t!("search_explanation", locale = locale.to_string()).to_string(),
+        search_explanation_label: t!("search_explanation_label", locale = locale.to_string()).to_string(),
+        locale: locale, //no shorthand wegen übersicht
     }
 }

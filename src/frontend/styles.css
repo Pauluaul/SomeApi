@@ -67,6 +67,9 @@ img {
     display: none;
     position: absolute;
     opacity: 0;
+    width: 40%;
+    margin-top: 10px !important;
+    padding: 2px;
 }
 
 #tooltip-checkbox {
@@ -76,4 +79,38 @@ img {
 #tooltip-checkbox:checked + label > .tooltip {
     display: block;
     opacity: 1;
+}
+
+h1>a {
+    text-decoration: none;
+    color: black;
+}
+
+h1>a:hover {
+    text-decoration: none;
+}
+
+header {
+    padding-bottom: 0 !important;
+}
+
+input {
+    width: 50%;
+}
+
+select {
+    height: fit-content;
+    margin-top: 10px;
+}
+
+.pagination {
+    display: inline-block;
+}
+
+.pagination a {
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid #ddd;
 }

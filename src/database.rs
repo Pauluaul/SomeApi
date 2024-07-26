@@ -132,6 +132,12 @@ pub async fn get_off_items() -> impl IntoResponse {
 }
 
 pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListTemplate {
+    if &search_query.search_text.len() < &3 {
+        return templates::ProductListTemplate {
+            products: vec![],
+            matches_with_text: t!( "matches_with" , locale = &search_query.language.clone()).to_string()
+        }
+    }
     let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
     info!("start search");
     let mut products:Vec<templates::ProductListResult> = vec!();

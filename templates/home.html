@@ -11,30 +11,42 @@
     <title>SomeApi</title>
 </head>
 <body>
-<main>
+<header class="site-header">
     <div style="display: flex;justify-content: space-between;">
+        <div>
+            <h1><a href="home.html">VeganFoodBase</a></h1>
+            <nav class="">
+                <p class="tool-bar">
+                    <a href="/{{ locale.to_string() }}">Startpage</a>
+                </p>
+            </nav>
+        </div>
+        <select id="language" name="language">
+            <option value="de"
+                    {% if locale == Locales::DE %}
+                    selected
+                    {% endif %}
+            >de</option>
+            <option value="en"
+                    {% if locale == Locales::EN %}
+                    selected
+                    {% endif %}
+            >en</option>
+        </select>
+    </div>
+</header>
+<main>
+    <div>
         <input type="text" name="search_text"
                hx-get="/trigger_delay"
                hx-trigger="input changed delay:500ms"
                hx-target="#search_results"
                hx-include="#language"
                placeholder="{{ search }}">
-        <select id="language" name="language">
-            <option value="de"
-                    {% if locale == Locales::DE %}
-                        selected
-                    {% endif %}
-            >de</option>
-            <option value="en"
-                    {% if locale == Locales::EN %}
-                        selected
-                    {% endif %}
-            >en</option>
-        </select>
     </div>
     <div>
         <input id="tooltip-checkbox" type="checkbox">
-        <label for="tooltip-checkbox"> Wie sucht man? <span class="tooltip">just do it</span></label>
+        <label class="box ok" style="width: fit-content" for="tooltip-checkbox">{{ search_explanation_label }}<span class="tooltip box">{{ search_explanation }}</span></label>
     </div>
     <div id="search_results">
 

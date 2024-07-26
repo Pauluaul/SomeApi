@@ -30,11 +30,13 @@ pub struct ProductInfoTemplate {
 #[derive(Template, Serialize, Deserialize)]
 #[template(path = "home.html")]
 pub struct HomeTemplate {
-    pub search : String,
-    pub locale : Locales
+    pub search: String,
+    pub locale: Locales,
+    pub search_explanation: String,
+    pub search_explanation_label: String
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 #[derive(PartialEq)]
 pub enum Locales {
     #[serde(rename(deserialize = "en"))]
