@@ -11,10 +11,6 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/log.log" beforeDir="false" afterPath="$PROJECT_DIR$/log.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/database.rs" beforeDir="false" afterPath="$PROJECT_DIR$/src/database.rs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/frontend/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/frontend/styles.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/locales/v2.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/src/locales/v2.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/product.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/product.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,6 +27,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MacroExpansionManager">
@@ -51,7 +52,7 @@
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.rust.reset.selective.auto.import&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feature-only-mongo&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/pauls/RustroverProjects/SomeApi/templates&quot;,
     &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
@@ -158,6 +159,10 @@
       <workItem from="1722023561815" duration="724000" />
       <workItem from="1722032125569" duration="3911000" />
       <workItem from="1722081063687" duration="6531000" />
+      <workItem from="1722102967734" duration="2026000" />
+      <workItem from="1722110425655" duration="216000" />
+      <workItem from="1722121268238" duration="268000" />
+      <workItem from="1722121557662" duration="1518000" />
     </task>
     <task id="LOCAL-00001" summary="first commit, sehr unordentlich, mvp &gt; schön">
       <option name="closed" value="true" />
@@ -242,7 +247,19 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="feature-only-mongo" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>

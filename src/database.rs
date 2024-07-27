@@ -3,7 +3,7 @@ use log::{error, info, warn};
 use meilisearch_sdk::{Client, MatchingStrategies, MatchRange};
 use mongodb::options::ClientOptions;
 use axum::http::StatusCode;
-use mongodb::Client as MongoClient;
+use mongodb::{Client as MongoClient, Collection, IndexModel};
 use futures_util::TryStreamExt;
 use serde_derive::{Deserialize, Serialize};
 use axum::extract::Query;
@@ -33,7 +33,7 @@ struct OffProduct {
 impl OffProduct {
     async fn to_vfb(&self) -> VFBProduct {
         VFBProduct {
-            id: self.id.clone(),
+            ean: self.id.clone(),
             name_de: self.product_name_de.clone(),
             name_en: self.product_name_en.clone(),
             brands: self.brands.clone(),
@@ -103,7 +103,7 @@ impl OFFNutriments {
 #[derive(Serialize, Deserialize, Debug)]
 #[derive(Clone)]
 pub struct VFBProduct {
-    pub id : Option<String>,
+    pub ean: Option<String>,
     pub name_de: Option<String>,
     pub name_en: Option<String>,
     pub brands : Option<String>,
@@ -167,7 +167,7 @@ pub async fn get_off_items() -> impl IntoResponse {
     let products_collection = off_database.collection::<OffProduct>("products");
 
     let mongo_filter = doc! {"ingredients_analysis_tags" : "en:vegan", "countries_tags.0" : "en:germany"};
-    let mut results = match products_collection.find(mongo_filter).await {
+    let mut results = match products_collection.find(mongo_filter).limit(100).await {
         Ok(e) => e,
         Err(_e) => {
             error!("MongoDB Search failed");
@@ -176,7 +176,23 @@ pub async fn get_off_items() -> impl IntoResponse {
     };
     info!("mongo search success");
 
-    meilisearch_client.delete_index("products").await.unwrap();
+    off_database.create_collection("vfb_products").await.unwrap();
+
+    let vfb_products_collection = off_database.collection::<VFBProduct>("vfb_products");
+
+    let index = IndexModel::builder().keys(doc! { "ean": 1 }).build();
+    vfb_products_collection.create_index(index).await.unwrap();
+
+    let mut vfb_products = vec!();
+
+    while let Ok(Some(product)) = results.try_next().await {
+        vfb_products.push(product.to_vfb().await)
+    }
+
+    vfb_products_collection.insert_many(vfb_products).await.unwrap();
+
+    //keep this, maybe I want it later
+    /*meilisearch_client.delete_index("products").await.unwrap();
 
     let meilisearch_index = meilisearch_client.index("products");
 
@@ -195,7 +211,8 @@ pub async fn get_off_items() -> impl IntoResponse {
             },
             _ => ()
         };
-    };
+    };*/
+
     info!("Indexing complete");
     StatusCode::OK.into_response()
 }
@@ -207,7 +224,22 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
             matches_with_text: t!( "matches_with" , locale = &search_query.language.clone()).to_string()
         }
     }
-    let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
+
+    let client = MongoClient::with_uri_str("mongodb://localhost:27017").await.unwrap();
+    let my_coll: Collection<VFBProduct> = client
+        .database("off")
+        .collection("vfb_products");
+    let filter = doc! { "name_de": {"$regex": search_query.search_text.clone(), "$options": "i"}};
+    let mut cursor = my_coll.find(
+        filter
+    ).await.unwrap();
+    while let Some(doc) = cursor.try_next().await.unwrap() {
+        println!("{:?}", doc);
+    }
+
+
+
+    /*let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
     info!("start search");
     let mut products:Vec<templates::ProductListResult> = vec!();
     match meilisearch_client.index("products")
@@ -218,7 +250,7 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
         Ok(e) => {
             for product in e.hits {
                 products.push(templates::ProductListResult {
-                    id : product.result.id,
+                    id : product.result.ean,
                     name : {
                         if product.result.name_de.clone().is_some_and(|s| s.len() > 0) {
                             product.result.name_de
@@ -246,6 +278,10 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
     };
     templates::ProductListTemplate {
         products: products,
+        matches_with_text: t!( "matches_with" , locale = &search_query.language.clone()).to_string()
+    }*/
+    templates::ProductListTemplate {
+        products: vec!(),
         matches_with_text: t!( "matches_with" , locale = &search_query.language.clone()).to_string()
     }
 }
