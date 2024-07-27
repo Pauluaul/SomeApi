@@ -1,14 +1,14 @@
 use askama_axum::IntoResponse;
 use log::{error, info, warn};
-use meilisearch_sdk::{Client, MatchRange};
+use meilisearch_sdk::{Client, MatchingStrategies, MatchRange};
 use mongodb::options::ClientOptions;
 use axum::http::StatusCode;
 use mongodb::Client as MongoClient;
-use mongodb::bson::{Bson, doc};
 use futures_util::TryStreamExt;
 use serde_derive::{Deserialize, Serialize};
 use axum::extract::Query;
 use std::collections::HashMap;
+use mongodb::bson::doc;
 use rust_i18n::t;
 use regex::Regex;
 use serde_json::Value;
@@ -26,7 +26,7 @@ struct OffProduct {
     pub ingredients_text_de: Option<String>,
     pub ingredients_text_en: Option<String>,
     pub images: Option<ImageType>,
-    pub nutriments: Option<Bson>,
+    pub nutriments: Option<OFFNutriments>,
     pub stores_tags: Option<Vec<String>>
 }
 
@@ -40,8 +40,62 @@ impl OffProduct {
             ingredients_de: self.ingredients_text_de.clone(),
             ingredients_en: self.ingredients_text_en.clone(),
             front_image: download_image(&self.id, &self.images).await,
-            nutriments: self.nutriments.clone(),
+            nutriments: {
+                match self.nutriments.clone() {
+                    Some(e) => e.to_vfb_nutriments(),
+                    None => VFBNutriments {
+                        energy_kcal: "N/A".to_string(),
+                        energy_kj: "N/A".to_string(),
+                        fat: "N/A".to_string(),
+                        saturated_fat: "N/A".to_string(),
+                        carbohydrates: "N/A".to_string(),
+                        sugars: "N/A".to_string(),
+                        fiber: "N/A".to_string(),
+                        proteins: "N/A".to_string(),
+                        salt: "N/A".to_string(),
+                    }
+                }
+            },
             stores_tags: self.stores_tags.clone(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone)]
+pub struct OFFNutriments {
+    #[serde(rename(deserialize = "energy-kcal_100g"))]
+    pub energy_kcal: Option<Value>,
+    #[serde(rename(deserialize = "energy-kj_100g"))]
+    pub energy_kj: Option<Value>,
+    #[serde(rename(deserialize = "fat_100g"))]
+    pub fat: Option<Value>,
+    #[serde(rename(deserialize = "saturated-fat_100g"))]
+    pub saturated_fat: Option<Value>,
+    #[serde(rename(deserialize = "carbohydrates_100g"))]
+    pub carbohydrates: Option<Value>,
+    #[serde(rename(deserialize = "sugars_100g"))]
+    pub sugars: Option<Value>,
+    #[serde(rename(deserialize = "fiber_100g"))]
+    pub fiber: Option<Value>,
+    #[serde(rename(deserialize = "proteins_100g"))]
+    pub proteins: Option<Value>,
+    #[serde(rename(deserialize = "salt_100g"))]
+    pub salt: Option<Value>
+}
+
+impl OFFNutriments {
+    fn to_vfb_nutriments(&self) -> VFBNutriments {
+        VFBNutriments {
+            energy_kcal: value_to_nutriments_string(&self.energy_kcal),
+            energy_kj: value_to_nutriments_string(&self.energy_kj),
+            fat: value_to_nutriments_string(&self.fat),
+            saturated_fat: value_to_nutriments_string(&self.saturated_fat),
+            carbohydrates: value_to_nutriments_string(&self.carbohydrates),
+            sugars: value_to_nutriments_string(&self.sugars),
+            fiber: value_to_nutriments_string(&self.fiber),
+            proteins: value_to_nutriments_string(&self.proteins),
+            salt: value_to_nutriments_string(&self.salt)
         }
     }
 }
@@ -56,14 +110,29 @@ pub struct VFBProduct {
     pub ingredients_de : Option<String>,
     pub ingredients_en: Option<String>,
     pub front_image: Option<String>,
-    pub nutriments: Option<Bson>,
+    pub nutriments: VFBNutriments,
     pub stores_tags: Option<Vec<String>>
 }
 
-static SEARCHABLE_ATTRIBUTES: [&str; 6] = [
+#[derive(Serialize, Deserialize, Debug)]
+#[derive(Clone)]
+pub struct VFBNutriments {
+    pub energy_kcal: String,
+    pub energy_kj: String,
+    pub fat: String,
+    pub saturated_fat: String,
+    pub carbohydrates: String,
+    pub sugars: String,
+    pub fiber: String,
+    pub proteins: String,
+    pub salt: String
+}
+
+static SEARCHABLE_ATTRIBUTES: [&str; 7] = [
     "id",
     "name_de",
     "name_en",
+    "stores_tags",
     "brands",
     "ingredients_de",
     "ingredients_en"
@@ -98,7 +167,7 @@ pub async fn get_off_items() -> impl IntoResponse {
     let products_collection = off_database.collection::<OffProduct>("products");
 
     let mongo_filter = doc! {"ingredients_analysis_tags" : "en:vegan", "countries_tags.0" : "en:germany"};
-    let mut results = match products_collection.find(mongo_filter).limit(1000).await {
+    let mut results = match products_collection.find(mongo_filter).await {
         Ok(e) => e,
         Err(_e) => {
             error!("MongoDB Search failed");
@@ -143,7 +212,7 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
     let mut products:Vec<templates::ProductListResult> = vec!();
     match meilisearch_client.index("products")
         .search()
-        .with_query(&search_query.search_text)
+        .with_query(&search_query.search_text.trim())
         .with_show_matches_position(true)
         .execute::<VFBProduct>().await {
         Ok(e) => {
@@ -250,4 +319,21 @@ fn matching_names(matches: HashMap<String, Vec<MatchRange>>, locale: &String) ->
         match_set.insert(cropped_matching.clone(), t!(&cropped_matching, locale = locale).to_string());
     }
     match_set
+}
+
+fn value_to_nutriments_string(value: &Option<Value>) -> String {
+    match value.clone() {
+        Some(e) => {
+            if e.is_string() {
+                e.as_str().unwrap_or("N/A").to_string()
+            } else if e.is_f64() {
+                e.as_f64().unwrap_or(0.0).to_string()
+            } else if e.is_u64() {
+                e.as_u64().unwrap_or(0).to_string()
+            } else {
+                "N/A".to_string()
+            }
+        },
+        None => "N/A".to_string()
+    }
 }

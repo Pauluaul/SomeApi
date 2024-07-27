@@ -20,9 +20,13 @@ matches_with:
   en: Matches with
   de: Übereinstimmung mit
 
+stores_tags:
+  en: Stores
+  de: Super Märkte
+
 search_explanation:
-  en: Just input every keyword you want your product to match with. (e.g. name, ingredients, store) A minus in front of the word acts as negation.
-  de: Einfach alle Schlüsselwörter eingeben die für dein Produkt relevant sind. (Bsp. Name, Inhalt, Laden) Ein Minus vor dem Wort bedeutet das Wort soll ausgeschlossen werden.
+  en: Just input every keyword you want your product to match with. (e.g. name, ingredients, store) A minus in front of the word acts as negation. The keywords in the beginning are interpreted as more important.
+  de: Einfach alle Schlüsselwörter eingeben die für dein Produkt relevant sind. (Bsp. Name, Inhalt, Laden) Ein Minus vor dem Wort bedeutet das Wort soll ausgeschlossen werden. Ein Wort ist wichtiger wenn es weiter vorne ist.
 
 search_explanation_label:
   en: How do i search?
