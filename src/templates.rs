@@ -24,7 +24,9 @@ pub struct ProductListResult {
 pub struct ProductInfoTemplate {
     pub name : Option<String>,
     pub ingredients : Option<String>,
-    pub front_image : Option<String>
+    pub front_image : Option<String>,
+    pub nutriments: HashMap<String, String>,
+    pub stores: Vec<String>
 }
 
 #[derive(Template, Serialize, Deserialize)]

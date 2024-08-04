@@ -12,18 +12,18 @@
 </head>
 <body>
 <main>
-    <div>
-        <h1>
-            {% match name %}
+    <div class="grid-base">
+        <div style="grid-area: header">
+            <h1>
+                {% match name %}
                 {% when Some with (val) %}
-                    {{ val }}
+                {{ val }}
                 {% when None %}
-                    dann nicht
-            {% endmatch %}
-        </h1>
-    </div>
-    <div class="f-row">
-        <div>
+                dann nicht
+                {% endmatch %}
+            </h1>
+        </div>
+        <div style="grid-area: left" class="box grid-item">
             {% match front_image %}
                 {% when Some with (val) %}
                     <img src="{{ val }}" alt="image">
@@ -31,7 +31,7 @@
                     <img src="https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg" alt="image">
             {% endmatch %}
         </div>
-        <div>
+        <div style="grid-area: main" class="box grid-item">
             <p>
                 {% match ingredients %}
                     {% when Some with (val) %}
@@ -41,7 +41,7 @@
                 {% endmatch %}
             </p>
         </div>
-        <div>
+        <div style="grid-area: right" class="box grid-item">
             <table>
                 <tr>
                     <th>
@@ -51,15 +51,22 @@
                         pro 100g
                     </th>
                 </tr>
-                <tr>
-                    <td>
-
-                    </td>
-                    <td>
-
-                    </td>
-                </tr>
+                {% for nutriment in nutriments %}
+                    <tr>
+                        <td>
+                            {{ nutriment.0 }}
+                        </td>
+                        <td>
+                            {{ nutriment.1 }}
+                        </td>
+                    </tr>
+                {% endfor %}
             </table>
+        </div>
+        <div style="grid-area: footer" class="box grid-item">
+            {% for store in stores %}
+                {{ store }},
+            {% endfor %}
         </div>
     </div>
 </main>

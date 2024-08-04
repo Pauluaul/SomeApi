@@ -114,3 +114,15 @@ select {
     text-decoration: none;
     border: 1px solid #ddd;
 }
+
+.grid-item {
+    margin: 10px;
+}
+
+.grid-base {
+    display: grid;
+    grid-template-areas:
+'header header header'
+'left   main   right '
+'footer footer footer';
+}

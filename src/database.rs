@@ -257,10 +257,27 @@ pub async fn product(info_query: Query<InfoQuery>) -> impl IntoResponse {
     match meilisearch_client.index("products")
         .search()
         .with_query(&info_query.id)
-        .execute::<templates::ProductInfoTemplate>().await {
+        .execute::<VFBProduct>().await {
         Ok(e) => {
+            println!("{:?}", e.hits.clone());
             match e.hits.clone().into_iter().nth(0) {
-                Some(x) => x.result.into_response(),
+                Some(x) => templates::ProductInfoTemplate {
+                    name: {
+                        if x.result.name_de.is_some() {
+                            x.result.name_de
+                        } else {
+                            x.result.name_en
+                        }
+                    },
+                    ingredients: if x.result.ingredients_de.is_some() {
+                        x.result.ingredients_de
+                    } else {
+                        x.result.ingredients_en
+                    },
+                    front_image: x.result.front_image,
+                    nutriments: nutriments_map(x.result.nutriments),
+                    stores: x.result.stores_tags.unwrap_or(vec![]),
+                }.into_response(),
                 None => {
                     error!("{:?}", e);
                     StatusCode::INTERNAL_SERVER_ERROR.into_response()
@@ -336,4 +353,18 @@ fn value_to_nutriments_string(value: &Option<Value>) -> String {
         },
         None => "N/A".to_string()
     }
+}
+
+fn nutriments_map(nutriments: VFBNutriments) -> HashMap<String, String> {
+    let mut nutriments_map: HashMap<String, String> = HashMap::new();
+    nutriments_map.insert("energy kcal".to_string(), nutriments.energy_kcal);
+    nutriments_map.insert("energy kj".to_string(), nutriments.energy_kj);
+    nutriments_map.insert("fat".to_string(), nutriments.fat);
+    nutriments_map.insert("saturated fat".to_string(), nutriments.saturated_fat);
+    nutriments_map.insert("carbs".to_string(), nutriments.carbohydrates);
+    nutriments_map.insert("sugar".to_string(), nutriments.sugars);
+    nutriments_map.insert("fiber".to_string(), nutriments.fiber);
+    nutriments_map.insert("protein".to_string(), nutriments.proteins);
+    nutriments_map.insert("salt".to_string(), nutriments.salt);
+    nutriments_map
 }
