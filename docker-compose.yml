@@ -1,0 +1,44 @@
+version: '3'
+services:
+  api:
+    image: craul1308/some_api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - mysite-backend-network
+    depends_on:
+      - mongo
+      - meili
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME : mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD : admin
+    ports:
+      - "27017:27017"
+    volumes:
+      - db:/var/lib/mongodb/data
+    networks:
+      - mysite-backend-network
+  meili:
+    image: getmeili/meilisearch
+    restart: always
+    container_name: meili
+    ports:
+      - "7700:7700"
+    volumes:
+      - ./../meili_data:/meili_data
+    networks:
+      - mysite-backend-network
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  mysite-backend-network:
+    driver: "bridge"

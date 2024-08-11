@@ -141,7 +141,7 @@ static SEARCHABLE_ATTRIBUTES: [&str; 7] = [
 pub async fn get_off_items() -> impl IntoResponse {
     info!("Start indexing");
 
-    let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
+    let meilisearch_client = Client::new("http://meili:7700", Some("admin"));
 
     let mongo_client_options = match ClientOptions::parse("mongodb://localhost:27017").await {
         Ok(e) => e,
@@ -207,7 +207,7 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
             matches_with_text: t!( "matches_with" , locale = &search_query.language.clone()).to_string()
         }
     }
-    let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
+    let meilisearch_client = Client::new("http://meili:7700/", Some("admin"));
     info!("start search");
     let mut products:Vec<templates::ProductListResult> = vec!();
     match meilisearch_client.index("products")
@@ -240,8 +240,8 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
             }
         },
         Err(e) => {
-            warn!("Unable to locate a razor: {e}, retrying");
-            panic!("OH-NO")
+            warn!("{e}");
+            panic!("index not found")
         }
     };
     templates::ProductListTemplate {
@@ -252,7 +252,7 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
 
 
 pub async fn product(info_query: Query<InfoQuery>) -> impl IntoResponse {
-    let meilisearch_client = Client::new("http://localhost:7700", Some("admin"));
+    let meilisearch_client = Client::new("http://meili:7700", Some("admin"));
     info!("start search");
     match meilisearch_client.index("products")
         .search()
