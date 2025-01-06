@@ -16,10 +16,9 @@
         <div style="grid-area: header">
             <h1>
                 {% match name %}
-                {% when Some with (val) %}
-                {{ val }}
-                {% when None %}
-                dann nicht
+                    {% when Some with (val) %}
+                        {{ val }}
+                    {% when None %}
                 {% endmatch %}
             </h1>
         </div>
@@ -32,12 +31,14 @@
             {% endmatch %}
         </div>
         <div style="grid-area: main" class="box grid-item">
+            <h4>
+                Inhaltsstoffe
+            </h4>
             <p>
                 {% match ingredients %}
                     {% when Some with (val) %}
                         {{ val }}
                     {% when None %}
-                        dann nicht
                 {% endmatch %}
             </p>
         </div>
@@ -51,9 +52,11 @@
                         pro 100g
                     </th>
                 </tr>
-                {% for nutriment in nutriments %}
-                    <tr>
-                        <td>
+                {% for (i, nutriment) in nutriments.iter().enumerate() %}
+                    <tr  >
+                        <td {% if (i == 3) || (i == 5) %}
+                            style="padding-left: 15px"
+                            {% endif %} >
                             {{ nutriment.0 }}
                         </td>
                         <td>
@@ -64,9 +67,20 @@
             </table>
         </div>
         <div style="grid-area: footer" class="box grid-item">
-            {% for store in stores %}
-                {{ store }},
-            {% endfor %}
+            <table>
+                <tr>
+                    <th>
+                        Supermärkte
+                    </th>
+                </tr>
+                {% for store in stores %}
+                <tr>
+                    <td>
+                        {{ store }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
 </main>

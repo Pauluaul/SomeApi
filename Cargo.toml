@@ -26,3 +26,5 @@ simple-logging = "2.0.2"
 rust-i18n = "3.0.0"
 openssl-sys = "0.9.103"
 openssl = { version = "0.10.64", features = ["vendored"] }
+opensearch = "2.2.0"
+indexmap = "2.4.0"

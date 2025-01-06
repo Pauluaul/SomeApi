@@ -38,7 +38,7 @@
 <main>
     <div>
         <input type="text" name="search_text"
-               hx-get="/trigger_delay"
+               hx-get="/search"
                hx-trigger="input changed delay:200ms"
                hx-target="#search_results"
                hx-include="#language"
@@ -46,7 +46,7 @@
     </div>
     <div>
         <input id="tooltip-checkbox" type="checkbox">
-        <label class="box ok" style="width: fit-content" for="tooltip-checkbox">{{ search_explanation_label }}<span class="tooltip box">{{ search_explanation }}</span></label>
+        <label class="box ok" style="width: fit-content" for="tooltip-checkbox">{{ translation_search_explanation_label }}<span class="tooltip box">{{ translation_search_explanation }}</span></label>
     </div>
     <div id="search_results">
 

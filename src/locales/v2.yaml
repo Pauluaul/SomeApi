@@ -31,3 +31,39 @@ search_explanation:
 search_explanation_label:
   en: How do i search?
   de: Wie suche ich?
+
+ingredients_energy_kcal:
+  en: energy kcal
+  de: Brennwert kcal
+
+ingredients_energy_kj:
+  en: energy kj
+  de: Brennwert kj
+
+ingredients_fat:
+  en: fat
+  de: Fett
+
+ingredients_fat_saturated:
+  en: of which saturates
+  de: davon gesättigte Fettsäuren
+
+ingredients_carbs:
+  en: carbohydrates
+  de: Kolenhydrate
+
+ingredients_sugar:
+  en: of which sugar
+  de: davon Zucker
+
+ingredients_fiber:
+  en: fibers
+  de: Ballaststoffe
+
+ingredients_protein:
+  en: protein
+  de: Eiweiß
+
+ingredients_salt:
+  en: salt
+  de: Salz

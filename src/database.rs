@@ -1,19 +1,20 @@
 use askama_axum::IntoResponse;
 use log::{error, info, warn};
-use meilisearch_sdk::{Client, MatchingStrategies, MatchRange};
+use meilisearch_sdk::{Client, MatchingStrategies, MatchRange, Index};
 use mongodb::options::ClientOptions;
 use axum::http::StatusCode;
 use mongodb::Client as MongoClient;
 use futures_util::TryStreamExt;
 use serde_derive::{Deserialize, Serialize};
-use axum::extract::Query;
+use axum::extract::{Path, Query};
 use std::collections::HashMap;
+use indexmap::IndexMap;
 use mongodb::bson::doc;
 use rust_i18n::t;
 use regex::Regex;
 use serde_json::Value;
 use crate::{ImageType, InfoQuery, SearchQuery, templates};
-
+use crate::templates::Locales;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[derive(Clone)]
@@ -143,7 +144,7 @@ pub async fn get_off_items() -> impl IntoResponse {
 
     let meilisearch_client = Client::new("http://meili:7700", Some("admin"));
 
-    let mongo_client_options = match ClientOptions::parse("mongodb://localhost:27017").await {
+    let mongo_client_options = match ClientOptions::parse("mongodb://mongo:27017").await {
         Ok(e) => e,
         Err(_e) => {
             error!("MongoDB client connection");
@@ -178,7 +179,7 @@ pub async fn get_off_items() -> impl IntoResponse {
 
     meilisearch_client.delete_index("products").await.unwrap();
 
-    let meilisearch_index = meilisearch_client.index("products");
+    let meilisearch_index = get_product_index().await;
 
     meilisearch_index.set_searchable_attributes(SEARCHABLE_ATTRIBUTES).await.unwrap();
 
@@ -207,11 +208,10 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
             matches_with_text: t!( "matches_with" , locale = &search_query.language.clone()).to_string()
         }
     }
-    let meilisearch_client = Client::new("http://meili:7700/", Some("admin"));
-    info!("start search");
+
     let mut products:Vec<templates::ProductListResult> = vec!();
-    match meilisearch_client.index("products")
-        .search()
+    match get_product_index()
+        .await.search()
         .with_query(&search_query.search_text.trim())
         .with_show_matches_position(true)
         .execute::<VFBProduct>().await {
@@ -251,11 +251,10 @@ pub async fn search(search_query: Query<SearchQuery>) -> templates::ProductListT
 }
 
 
-pub async fn product(info_query: Query<InfoQuery>) -> impl IntoResponse {
-    let meilisearch_client = Client::new("http://meili:7700", Some("admin"));
-    info!("start search");
-    match meilisearch_client.index("products")
-        .search()
+pub async fn product(info_query: Query<InfoQuery>, locale: Option<Path<Locales>>) -> impl IntoResponse {
+    let locale = locale.unwrap_or(Path(Locales::DE)).0;
+    match get_product_index()
+        .await.search()
         .with_query(&info_query.id)
         .execute::<VFBProduct>().await {
         Ok(e) => {
@@ -275,7 +274,7 @@ pub async fn product(info_query: Query<InfoQuery>) -> impl IntoResponse {
                         x.result.ingredients_en
                     },
                     front_image: x.result.front_image,
-                    nutriments: nutriments_map(x.result.nutriments),
+                    nutriments: nutriments_map(x.result.nutriments, locale),
                     stores: x.result.stores_tags.unwrap_or(vec![]),
                 }.into_response(),
                 None => {
@@ -289,6 +288,13 @@ pub async fn product(info_query: Query<InfoQuery>) -> impl IntoResponse {
             StatusCode::INTERNAL_SERVER_ERROR.into_response()
         }
     }
+}
+
+async fn get_product_index() -> Index
+{
+    let meilisearch_client = Client::new("http://meili:7700", Some("admin"));
+    info!("start search");
+    meilisearch_client.index("products")
 }
 
 async fn download_image(product: &Option<String>, images: &Option<ImageType>) -> Option<String>
@@ -355,16 +361,16 @@ fn value_to_nutriments_string(value: &Option<Value>) -> String {
     }
 }
 
-fn nutriments_map(nutriments: VFBNutriments) -> HashMap<String, String> {
-    let mut nutriments_map: HashMap<String, String> = HashMap::new();
-    nutriments_map.insert("energy kcal".to_string(), nutriments.energy_kcal);
-    nutriments_map.insert("energy kj".to_string(), nutriments.energy_kj);
-    nutriments_map.insert("fat".to_string(), nutriments.fat);
-    nutriments_map.insert("saturated fat".to_string(), nutriments.saturated_fat);
-    nutriments_map.insert("carbs".to_string(), nutriments.carbohydrates);
-    nutriments_map.insert("sugar".to_string(), nutriments.sugars);
-    nutriments_map.insert("fiber".to_string(), nutriments.fiber);
-    nutriments_map.insert("protein".to_string(), nutriments.proteins);
-    nutriments_map.insert("salt".to_string(), nutriments.salt);
+fn nutriments_map(nutriments: VFBNutriments, locale: Locales) -> Vec<(String, String)> {
+    let mut nutriments_map: Vec<(String, String)> = vec!();
+    nutriments_map.push((t!("ingredients_energy_kcal", locale = locale.to_string()).to_string(), nutriments.energy_kcal));
+    nutriments_map.push((t!("ingredients_energy_kj", locale = locale.to_string()).to_string(), nutriments.energy_kj));
+    nutriments_map.push((t!("ingredients_fat", locale = locale.to_string()).to_string(), nutriments.fat));
+    nutriments_map.push((t!("ingredients_fat_saturated", locale = locale.to_string()).to_string(), nutriments.saturated_fat));
+    nutriments_map.push((t!("ingredients_carbs", locale = locale.to_string()).to_string(), nutriments.carbohydrates));
+    nutriments_map.push((t!("ingredients_sugar", locale = locale.to_string()).to_string(), nutriments.sugars));
+    nutriments_map.push((t!("ingredients_fiber", locale = locale.to_string()).to_string(), nutriments.fiber));
+    nutriments_map.push((t!("ingredients_protein", locale = locale.to_string()).to_string(), nutriments.proteins));
+    nutriments_map.push((t!("ingredients_salt", locale = locale.to_string()).to_string(), nutriments.salt));
     nutriments_map
 }

@@ -53,17 +53,18 @@ fn routes_dynamic() -> Router {
     Router::new()
         .route("/", get(main_page))
         .route("/:locale", get(main_page))
-        .route("/trigger_delay", get(database::search))
+        .route("/search", get(database::search))
         .route("/reindex", get(database::get_off_items))
         .route("/product", get(database::product))
+        .route("/:locale/product", get(database::product))
         .route_service("/css", ServeFile::new("src/frontend/styles.css"))
 }
 async fn main_page(locale: Option<Path<templates::Locales>>) -> templates::HomeTemplate {
     let locale = locale.unwrap_or(Path(templates::Locales::DE)).0;
     templates::HomeTemplate {
         search: t!("search", locale = locale.to_string()).to_string(),
-        search_explanation: t!("search_explanation", locale = locale.to_string()).to_string(),
-        search_explanation_label: t!("search_explanation_label", locale = locale.to_string()).to_string(),
+        translation_search_explanation: t!("search_explanation", locale = locale.to_string()).to_string(),
+        translation_search_explanation_label: t!("search_explanation_label", locale = locale.to_string()).to_string(),
         locale: locale, //no shorthand wegen übersicht
     }
 }

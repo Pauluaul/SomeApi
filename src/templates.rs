@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use askama_axum::Template;
+use indexmap::IndexMap;
 use serde_derive::{Deserialize, Serialize};
 
 #[derive(Template)]
@@ -25,7 +26,7 @@ pub struct ProductInfoTemplate {
     pub name : Option<String>,
     pub ingredients : Option<String>,
     pub front_image : Option<String>,
-    pub nutriments: HashMap<String, String>,
+    pub nutriments: Vec<(String, String)>,
     pub stores: Vec<String>
 }
 
@@ -34,8 +35,8 @@ pub struct ProductInfoTemplate {
 pub struct HomeTemplate {
     pub search: String,
     pub locale: Locales,
-    pub search_explanation: String,
-    pub search_explanation_label: String
+    pub translation_search_explanation: String,
+    pub translation_search_explanation_label: String
 }
 
 #[derive(Serialize, Deserialize, Clone)]
